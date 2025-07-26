@@ -1,7 +1,7 @@
 # SYN Flood Attack Simulation with Docker: Lab Setup and Traffic Analysis
 
 **Hands-on experience with SYN flood attacks and network traffic analysis**  
-*Erwin Bruno - July 26, 2026*  
+*Erwin Bruno - 2025*  
 *Secure Network Engineering (CYBR-508-02P)*
 
 ## Objective
