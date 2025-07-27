@@ -45,6 +45,10 @@ elastic SIEM
 cyberchef
 change management system
 
+Creds are given which is elastic:elastic, log in to elastic siem, 
+pull up evens > open menu > select discover > click where it says "15 minutes ago" that is the from, select absolute , change date to Dec 1st, 2024 0900, click where it says "now", absolute change to same date 0930. That is same day and 30 mins of log.
+
+
 What is the name of the account causing all the failed login attempts?
 Answer: service_admin
 How many failed logon attempts were observed?
