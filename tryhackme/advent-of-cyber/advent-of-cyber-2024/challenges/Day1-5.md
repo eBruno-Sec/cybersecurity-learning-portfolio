@@ -47,6 +47,14 @@ change management system
 
 Creds are given which is elastic:elastic, log in to elastic siem, 
 pull up evens > open menu > select discover > click where it says "15 minutes ago" that is the from, select absolute , change date to Dec 1st, 2024 0900, click where it says "now", absolute change to same date 0930. That is same day and 30 mins of log.
+Since we are looking for events related to PowerShell, we would like to know the following details about the logs. 
+
+    The hostname where the command was run. We can use the host.hostname field as a column for that.
+    The user who performed the activity. We can add the user.name field as a column for this information.
+    We will add the event.category field to ensure we are looking at the correct event category.
+    To know the actual commands run using PowerShell, we can add the process.command_line field.
+    Finally, to know if the activity succeeded, we will add the event.outcome field.
+
 
 
 What is the name of the account causing all the failed login attempts?
