@@ -41,10 +41,6 @@ docker-compose -f docker-compose-new.yml up -d
 ### Step 4: Access Lab Interface
 Navigate to: `http://localhost:5001`
 
-Test credentials:
-- ErwinBruno:username / ErwinBruno@gmail.com
-- username1:username / secret1@email.com
-
 ## Challenge Progression
 
 ### Level 0: Basic Source Code Analysis
