@@ -1,64 +1,91 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>My Interview Notes</title>
-  <style>
-    body { font-family: Arial, sans-serif; max-width: 900px; margin: 20px auto; padding: 20px; }
-    .header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #007bff; padding-bottom: 10px; }
-    .nav { margin: 20px 0; }
-    .nav a { margin-right: 15px; color: #007bff; text-decoration: none; }
-    .nav a:hover { text-decoration: underline; }
-    button { padding: 10px 20px; background: #dc3545; color: white; border: none; cursor: pointer; }
-    .note-card { border: 1px solid #ddd; padding: 15px; margin: 15px 0; border-radius: 5px; background: #f9f9f9; }
-    .note-card h3 { margin-top: 0; color: #007bff; }
-    .create-btn { background: #28a745; padding: 10px 20px; color: white; text-decoration: none; display: inline-block; border-radius: 5px; }
-    .create-btn:hover { background: #218838; }
-    .empty { text-align: center; color: #666; padding: 40px; }
-  </style>
+    <title>My Interview Notes</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+        }
+        .note {
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+        }
+        .note h3 {
+            margin-top: 0;
+        }
+        .button-group {
+            margin-top: 10px;
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            text-decoration: none;
+            display: inline-block;
+            box-sizing: border-box;
+        }
+        .btn-edit {
+            background-color: #4CAF50;
+            color: white;
+        }
+        .btn-delete {
+            background-color: #f44336;
+            color: white;
+        }
+        .btn:hover {
+            opacity: 0.8;
+        }
+        nav {
+            margin-bottom: 20px;
+        }
+        nav a {
+            margin-right: 15px;
+            color: #007bff;
+            text-decoration: none;
+        }
+    </style>
 </head>
 <body>
-  <div class="header">
-    <h1>📝 My Interview Notes</h1>
-    <div>
-      <strong>Logged in as: <%= username %> (<%= role %>)</strong>
-      <form action="/auth/logout" method="POST" style="display: inline;">
-        <button type="submit">Logout</button>
-      </form>
-    </div>
-  </div>
-
-  <div class="nav">
-    <a href="/notes">My Notes</a>
-    <a href="/notes/create">➕ Create New Note</a>
-    <% if (role === 'admin') { %>
-      <a href="/admin/users">👥 View All Users (Admin)</a>
-      <a href="/admin/notes">📋 View All Notes (Admin)</a>
-    <% } %>
-  </div>
-
-  <% if (notes.length === 0) { %>
-    <div class="empty">
-      <p>You haven't created any interview notes yet.</p>
-      <a href="/notes/create" class="create-btn">Create Your First Note</a>
-    </div>
-  <% } else { %>
-    <h2>Your Interview Notes (<%= notes.length %>)</h2>
-    <% notes.forEach(note => { %>
-      <div class="note-card">
-        <h3><%= note.candidate_name %></h3>
-        <p><strong>Position:</strong> <%= note.position %></p>
-        <p><strong>Interview Date:</strong> <%= note.interview_date %></p>
-        <p><strong>Notes:</strong><br><%= note.notes %></p>
-        <p><small>Created: <%= note.created_at %></small></p>
-	<a href="/notes/edit/<%= note.id %>">
-    		<button type="button">Edit</button>
-	</a>
-        <form action="/notes/delete/<%= note.id %>" method="POST" style="display: inline;" onsubmit="return confirm('Are you sure you want to delete this note?');">
-          <button type="submit" style="background: #dc3545; padding: 5px 15px; font-size: 14px;">🗑️ Delete</button>
+    <nav>
+        <a href="/notes/create">Create New Note</a>
+        <% if (role === 'admin') { %>
+            <a href="/admin/users">View All Users</a>
+            <a href="/admin/notes">View All Notes</a>
+        <% } %>
+        <form action="/auth/logout" method="POST" style="display: inline;">
+            <button type="submit" style="background: none; border: none; color: #007bff; cursor: pointer; text-decoration: underline;">Logout</button>
         </form>
-      </div>
-      </div>
-    <% }); %>
-  <% } %>
+    </nav>
+
+    <h1>My Interview Notes</h1>
+
+    <% if (notes.length === 0) { %>
+        <p>No notes yet. <a href="/notes/create">Create your first note!</a></p>
+    <% } else { %>
+        <% notes.forEach(note => { %>
+            <div class="note">
+                <h3><%= note.candidate_name %> - <%= note.position %></h3>
+                <p><strong>Interview Date:</strong> <%= note.interview_date %></p>
+                <p><strong>Notes:</strong> <%= note.notes %></p>
+                <p><small>Created: <%= note.created_at %></small></p>
+                <div class="button-group">
+                    <a href="/notes/edit/<%= note.id %>" class="btn btn-edit">Edit</a>
+                    <form action="/notes/delete/<%= note.id %>" method="POST" style="margin: 0;">
+                        <button type="submit" class="btn btn-delete" onclick="return confirm('Are you sure you want to delete this note?')">Delete</button>
+                    </form>
+                </div>
+            </div>
+        <% }); %>
+    <% } %>
 </body>
 </html>
