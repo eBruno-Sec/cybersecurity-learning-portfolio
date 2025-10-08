@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Create Interview Note</title>
+  <style>
+    body { font-family: Arial, sans-serif; max-width: 600px; margin: 50px auto; padding: 20px; }
+    .header { border-bottom: 2px solid #007bff; padding-bottom: 10px; margin-bottom: 20px; }
+    input, textarea { width: 100%; padding: 10px; margin: 10px 0; box-sizing: border-box; }
+    textarea { min-height: 150px; font-family: Arial, sans-serif; }
+    button { padding: 10px 20px; background: #28a745; color: white; border: none; cursor: pointer; margin-right: 10px; }
+    button:hover { background: #218838; }
+    .cancel { background: #6c757d; }
+    .cancel:hover { background: #5a6268; }
+    label { font-weight: bold; display: block; margin-top: 10px; }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>Create New Interview Note</h1>
+    <p>Logged in as: <strong><%= username %></strong></p>
+  </div>
+
+  <form action="/notes/create" method="POST">
+    <label>Candidate Name:</label>
+    <input type="text" name="candidate_name" placeholder="e.g., John Smith" required>
+
+    <label>Position:</label>
+    <input type="text" name="position" placeholder="e.g., Software Engineer" required>
+
+    <label>Interview Date:</label>
+    <input type="date" name="interview_date" required>
+
+    <label>Notes:</label>
+    <textarea name="notes" placeholder="Enter your interview notes here..." required></textarea>
+
+    <button type="submit">💾 Save Note</button>
+    <button type="button" class="cancel" onclick="window.location.href='/notes'">Cancel</button>
+  </form>
+</body>
+</html>

@@ -1,0 +1,55 @@
+name: Interview Notes Application
+version: 1.0.0
+description: A secure web application for managing interview notes with role-based access control
+
+features:
+  - name: User Authentication
+    description: Users can register, login, and logout securely
+    endpoints:
+      - POST /auth/register - Create new user account
+      - POST /auth/login - Authenticate user
+      - POST /auth/logout - End user session
+    security:
+      - Passwords hashed using bcrypt
+      - Session-based authentication
+      - CSRF protection via session tokens
+
+  - name: Interview Notes Management
+    description: Users can create and view their interview notes
+    endpoints:
+      - GET /notes - View user's own notes
+      - POST /notes/create - Create new interview note
+    access: Authenticated users only
+    data:
+      - candidate_name (string, required)
+      - position (string, required)
+      - interview_date (date, required)
+      - notes (text, required)
+      - created_by (user_id, auto)
+
+  - name: Admin Functions
+    description: Admin users have elevated privileges
+    endpoints:
+      - GET /admin/users - View all registered users
+      - GET /admin/notes - View all interview notes
+    access: Admin role only
+    security:
+      - Role-based access control (RBAC)
+      - Unauthorized access returns 403 Forbidden
+
+roles:
+  - regular: Can create and view own notes
+  - admin: Can view all users and all notes
+
+database:
+  type: SQLite
+  tables:
+    - users (id, username, password_hash, role)
+    - interview_notes (id, candidate_name, position, interview_date, notes, user_id, created_at)
+
+security_controls:
+  - Input validation on all forms
+  - SQL injection prevention via parameterized queries
+  - XSS prevention via template escaping
+  - Authentication required for all non-public routes
+  - Role verification for admin routes

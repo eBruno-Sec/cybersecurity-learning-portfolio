@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Edit Interview Note</title>
+</head>
+<body>
+    <h1>Edit Interview Note</h1>
+    
+    <form method="POST" action="/notes/edit/<%= note.id %>">
+        <label>Candidate Name:</label><br>
+        <input type="text" name="candidate_name" value="<%= note.candidate_name %>" required><br><br>
+        
+        <label>Position:</label><br>
+        <input type="text" name="position" value="<%= note.position %>" required><br><br>
+        
+        <label>Interview Date:</label><br>
+        <input type="date" name="interview_date" value="<%= note.interview_date %>" required><br><br>
+        
+        <label>Notes:</label><br>
+        <textarea name="notes" rows="10" cols="50" required><%= note.notes %></textarea><br><br>
+        
+        <button type="submit">Save Changes</button>
+        <a href="/notes"><button type="button">Cancel</button></a>
+    </form>
+</body>
+</html>

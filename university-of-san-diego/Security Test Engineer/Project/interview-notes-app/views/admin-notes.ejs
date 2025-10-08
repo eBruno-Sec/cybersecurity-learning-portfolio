@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>All Notes - Admin</title>
+  <style>
+    body { font-family: Arial, sans-serif; max-width: 900px; margin: 20px auto; padding: 20px; }
+    .header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #dc3545; padding-bottom: 10px; }
+    .nav { margin: 20px 0; }
+    .nav a { margin-right: 15px; color: #007bff; text-decoration: none; }
+    .nav a:hover { text-decoration: underline; }
+    button { padding: 10px 20px; background: #dc3545; color: white; border: none; cursor: pointer; }
+    .note-card { border: 1px solid #ddd; padding: 15px; margin: 15px 0; border-radius: 5px; background: #f9f9f9; }
+    .note-card h3 { margin-top: 0; color: #007bff; }
+    .user-badge { background: #6c757d; color: white; padding: 3px 8px; border-radius: 3px; font-size: 12px; }
+    .empty { text-align: center; color: #666; padding: 40px; }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>📋 All Interview Notes (Admin View)</h1>
+    <div>
+      <strong>Logged in as: <%= username %> (Admin)</strong>
+      <form action="/auth/logout" method="POST" style="display: inline;">
+        <button type="submit">Logout</button>
+      </form>
+    </div>
+  </div>
+
+  <div class="nav">
+    <a href="/notes">My Notes</a>
+    <a href="/notes/create">➕ Create New Note</a>
+    <a href="/admin/users">👥 View All Users (Admin)</a>
+    <a href="/admin/notes">📋 View All Notes (Admin)</a>
+  </div>
+
+  <% if (notes.length === 0) { %>
+    <div class="empty">
+      <p>No interview notes in the system yet.</p>
+    </div>
+  <% } else { %>
+    <h2>All Interview Notes (<%= notes.length %>)</h2>
+    <% notes.forEach(note => { %>
+      <div class="note-card">
+        <h3><%= note.candidate_name %></h3>
+        <p><strong>Position:</strong> <%= note.position %></p>
+        <p><strong>Interview Date:</strong> <%= note.interview_date %></p>
+        <p><strong>Notes:</strong><br><%= note.notes %></p>
+        <p>
+          <span class="user-badge">Created by: <%= note.username %></span>
+          <small> • <%= note.created_at %></small>
+        </p>
+        <a href="/notes/edit/<%= note.id %>">
+    		<button type="button">Edit</button>
+	</a>
+	<form method="POST" action="/notes/delete/<%= note.id %>" style="display: inline;">
+    		<button type="submit">Delete</button>
+	</form>
+      </div>
+    <% }); %>
+  <% } %>
+</body>
+</html>

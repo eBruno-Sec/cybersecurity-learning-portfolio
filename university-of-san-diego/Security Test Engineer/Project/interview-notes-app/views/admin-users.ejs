@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>All Users - Admin</title>
+  <style>
+    body { font-family: Arial, sans-serif; max-width: 900px; margin: 20px auto; padding: 20px; }
+    .header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #dc3545; padding-bottom: 10px; }
+    .nav { margin: 20px 0; }
+    .nav a { margin-right: 15px; color: #007bff; text-decoration: none; }
+    .nav a:hover { text-decoration: underline; }
+    button { padding: 10px 20px; background: #dc3545; color: white; border: none; cursor: pointer; }
+    table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+    th, td { padding: 12px; text-align: left; border-bottom: 1px solid #ddd; }
+    th { background: #dc3545; color: white; }
+    .admin-badge { background: #ffc107; padding: 3px 8px; border-radius: 3px; font-size: 12px; }
+    .regular-badge { background: #28a745; color: white; padding: 3px 8px; border-radius: 3px; font-size: 12px; }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>👥 All Users (Admin View)</h1>
+    <div>
+      <strong>Logged in as: <%= username %> (Admin)</strong>
+      <form action="/auth/logout" method="POST" style="display: inline;">
+        <button type="submit">Logout</button>
+      </form>
+    </div>
+  </div>
+
+  <div class="nav">
+    <a href="/notes">My Notes</a>
+    <a href="/notes/create">➕ Create New Note</a>
+    <a href="/admin/users">👥 View All Users (Admin)</a>
+    <a href="/admin/notes">📋 View All Notes (Admin)</a>
+  </div>
+
+  <h2>Registered Users (<%= users.length %>)</h2>
+
+  <table>
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Username</th>
+        <th>Role</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% users.forEach(user => { %>
+        <tr>
+          <td><%= user.id %></td>
+          <td><%= user.username %></td>
+          <td>
+            <% if (user.role === 'admin') { %>
+              <span class="admin-badge">ADMIN</span>
+            <% } else { %>
+              <span class="regular-badge">REGULAR</span>
+            <% } %>
+          </td>
+        </tr>
+      <% }); %>
+    </tbody>
+  </table>
+</body>
+</html>

@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Register - Interview Notes</title>
+  <style>
+    body { font-family: Arial, sans-serif; max-width: 400px; margin: 50px auto; padding: 20px; }
+    input { width: 100%; padding: 10px; margin: 10px 0; box-sizing: border-box; }
+    button { width: 100%; padding: 10px; background: #28a745; color: white; border: none; cursor: pointer; }
+    button:hover { background: #218838; }
+    a { color: #007bff; }
+  </style>
+</head>
+<body>
+  <h1>Register New Account</h1>
+
+  <form action="/auth/register" method="POST">
+    <input type="text" name="username" placeholder="Username" required>
+    <input type="password" name="password" placeholder="Password (min 6 characters)" required minlength="6">
+    <button type="submit">Register</button>
+  </form>
+
+  <p>Already have an account? <a href="/login">Login here</a></p>
+</body>
+</html>
