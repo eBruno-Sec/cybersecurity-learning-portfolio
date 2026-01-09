@@ -1,6 +1,6 @@
-# Dumb Fuzzing Tool for WRA Compliance Testing
+# Dumb Fuzzing Tool
 
-A NIST SP 800-115 compliant network fuzzer designed for testing embedded systems and Weapon Replaceable Assembly (WRA) components against common vulnerability classes.
+A NIST SP 800-115 compliant network fuzzer designed for testing embedded systems and components against common vulnerability classes.
 
 ## Overview
 
@@ -183,7 +183,7 @@ sudo python3 dumb_fuzzer.py --target 10.50.1.100 --duration 180
 less fuzzing_report.json
 ```
 
-### Testing GreenHills OS Embedded System
+### Testing Embedded System
 
 ```bash
 # Direct ethernet connection required
